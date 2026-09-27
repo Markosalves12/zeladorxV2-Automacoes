@@ -6,4 +6,4 @@
 - Geração de serviços é idempotente (id_configuracao + DataDeInicio) e e-mails usam chave única em NotificacaoEnviada, para reprocessar sem duplicar.
 - Senhas, convites e códigos de troca de senha ficam no app principal; aqui só e-mails operacionais.
 - Localmente os e-mails vão para o terminal (EMAIL_ENVIO_REAL=False) para não disparar aos gerentes de teste.
-- Visual segue a família: azul/verde, Sora/Manrope, menu lateral por seção.
+- Visual replica os tokens e proporções do zeladorxV2 (azul sólido, superfícies claras, raio de 8 px, Sora/Manrope e sidebar recolhível) para manter continuidade entre plataformas.

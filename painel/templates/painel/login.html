@@ -1,9 +1,9 @@
 {% load static %}<!doctype html><html lang="pt-br"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Entrar · ZeladorX Automações</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<link rel="stylesheet" href="{% static 'painel/ops.css' %}?v=1"></head>
+<link rel="stylesheet" href="{% static 'painel/ops.css' %}?v=2"></head>
 <body class="ops-login-page"><form method="post" class="ops-login">{% csrf_token %}
-<span class="ops-logo grande"><i class="bi bi-lightning-charge-fill"></i></span>
+<img class="ops-login-logo" src="{% static 'painel/img/zeladorx-logo.png' %}" alt="ZeladorX">
 <h1>ZeladorX Automações</h1><p>Plataforma interna para agendamentos e notificações.</p>
 {% for m in messages %}<div class="ops-alerta {{ m.tags }}">{{ m }}</div>{% endfor %}
 {% if form.errors %}<div class="ops-alerta error">E-mail ou senha incorretos.</div>{% endif %}
