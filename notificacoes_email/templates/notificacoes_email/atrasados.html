@@ -1,0 +1,6 @@
+{% extends "notificacoes_email/base.html" %}
+{% block faixa %}Atenção: serviços atrasados{% endblock %}
+{% block conteudo %}
+<p style="margin:0;font-size:14px;line-height:1.6;"><strong style="color:#d93636;">{{ total }} serviço(s)</strong> passaram do prazo e ainda não foram concluídos.</p>
+{% include "notificacoes_email/_lista.html" with mostrar_conclusao=True %}
+{% endblock %}

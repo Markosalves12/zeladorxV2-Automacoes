@@ -1,0 +1,17 @@
+{% extends "painel/base.html" %}
+{% block titulo %}E-mails{% endblock %}{% block cabecalho %}E-mails enviados{% endblock %}
+{% block subtitulo %}Cada notificação fica registrada. Falhas são tentadas de novo na próxima rodada.{% endblock %}
+{% block conteudo %}
+<form class="ops-filtros" method="get">
+<input type="search" name="busca" placeholder="Buscar e-mail ou assunto" value="{{ request.GET.busca }}">
+<select name="tipo"><option value="">Todos os tipos</option>{% for v, n in tipos %}<option value="{{ v }}" {% if request.GET.tipo == v %}selected{% endif %}>{{ n }}</option>{% endfor %}</select>
+<select name="status"><option value="">Todos os status</option>{% for v, n in status_opcoes %}<option value="{{ v }}" {% if request.GET.status == v %}selected{% endif %}>{{ n }}</option>{% endfor %}</select>
+<button class="ops-btn">Filtrar</button></form>
+<section class="ops-card">
+<table class="ops-tabela"><thead><tr><th>Tipo</th><th>Destinatário</th><th>Assunto</th><th>Status</th><th>Tentativas</th><th>Quando</th></tr></thead><tbody>
+{% for n in pagina %}<tr><td>{{ n.get_tipo_display }}</td><td>{{ n.email }}</td><td>{{ n.assunto }}{% if n.erro %}<small class="ops-sub erro">{{ n.erro|truncatechars:140 }}</small>{% endif %}</td><td>{% include "painel/_status.html" with s=n.status rotulo=n.get_status_display %}</td><td>{{ n.tentativas }}</td><td>{{ n.atualizada_em|date:"d/m/Y H:i" }}</td></tr>
+{% empty %}<tr><td colspan="6" class="ops-vazio">Nenhum e-mail registrado.</td></tr>{% endfor %}
+</tbody></table>
+{% include "painel/_paginacao.html" %}
+</section>
+{% endblock %}

@@ -1,0 +1,6 @@
+{% extends "notificacoes_email/base.html" %}
+{% block faixa %}Serviços concluídos em {{ data|date:"d/m/Y" }}{% endblock %}
+{% block conteudo %}
+<p style="margin:0;font-size:14px;line-height:1.6;">Boas notícias: <strong style="color:#0f9f6e;">{{ total }} serviço(s)</strong> foram concluídos hoje.</p>
+{% include "notificacoes_email/_lista.html" with mostrar_conclusao=True %}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "painel/base.html" %}
+{% block titulo %}Rotinas{% endblock %}{% block cabecalho %}Rotinas{% endblock %}
+{% block subtitulo %}Ative, pause, mude o horário ou execute manualmente — inclusive para uma data passada.{% endblock %}
+{% block conteudo %}
+<div class="ops-cards-rotina">
+{% for r in rotinas %}
+<article class="ops-card rotina {% if not r.ativa %}pausada{% endif %}">
+  <header><div><h2>{{ r.nome }}</h2><code>{{ r.codigo }}</code></div>
+  <form method="post" action="{% url 'painel:alternar_rotina' r.pk %}">{% csrf_token %}<button class="ops-switch {% if r.ativa %}ligado{% endif %}" title="{% if r.ativa %}Pausar{% else %}Ativar{% endif %}"><span></span></button></form></header>
+  <p>{{ r.descricao }}</p>
+  <dl><div><dt>Frequência</dt><dd>{{ r.get_frequencia_display }}</dd></div>
+  <div><dt>Última execução</dt><dd>{% if r.ultima %}{% include "painel/_status.html" with s=r.ultima.status rotulo=r.ultima.iniciada_em|date:"d/m H:i" %}{% else %}—{% endif %}</dd></div>
+  <div><dt>Situação</dt><dd>{% if not r.ativa %}Pausada{% elif r.pendente %}Pendente{% else %}Em dia{% endif %}</dd></div></dl>
+  <div class="ops-rotina-acoes">
+    <form method="post" action="{% url 'painel:horario_rotina' r.pk %}" class="ops-inline">{% csrf_token %}<label>Horário<input type="time" name="horario" value="{{ r.horario|time:'H:i' }}"></label><button class="ops-btn">Salvar</button></form>
+    <form method="post" action="{% url 'painel:executar_rotina' r.pk %}" class="ops-inline">{% csrf_token %}<label>Data<input type="date" name="data" value="{{ hoje|date:'Y-m-d' }}"></label><button class="ops-btn primario"><i class="bi bi-play-fill"></i>Executar</button></form>
+  </div>
+</article>
+{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "painel/base.html" %}
+{% block titulo %}Configurações{% endblock %}{% block cabecalho %}Configurações{% endblock %}
+{% block subtitulo %}Servidor de e-mail em uso e teste de envio.{% endblock %}
+{% block conteudo %}
+<div class="ops-grid">
+<section class="ops-card"><h2>Servidor de e-mail</h2>
+<dl class="ops-dl"><div><dt>Servidor</dt><dd>{{ email_host }}:{{ email_port }}</dd></div><div><dt>Segurança</dt><dd>{% if ssl %}SSL{% elif tls %}TLS{% else %}Nenhuma{% endif %}</dd></div><div><dt>Remetente</dt><dd>{{ email_user }}</dd></div><div><dt>Modo</dt><dd>{% if envio_real %}<span class="ops-pill ok">Envio real</span>{% else %}<span class="ops-pill neutro">Somente terminal (teste)</span>{% endif %}</dd></div><div><dt>Link nos e-mails</dt><dd>{{ zeladorx_url }}</dd></div></dl>
+{% if not envio_real %}<p class="ops-nota">No computador local os e-mails aparecem no terminal para não disparar aos gerentes de teste. Para enviar de verdade, defina <code>EMAIL_ENVIO_REAL=True</code>.</p>{% endif %}
+</section>
+<section class="ops-card"><h2>Enviar e-mail de teste</h2>
+<form method="post" class="ops-form">{% csrf_token %}<label>Destinatário<input type="email" name="email" value="{{ request.user.email }}" required></label><button class="ops-btn primario"><i class="bi bi-send"></i>Enviar teste</button></form>
+</section>
+</div>
+{% endblock %}

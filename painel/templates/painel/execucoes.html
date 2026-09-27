@@ -1,0 +1,16 @@
+{% extends "painel/base.html" %}
+{% block titulo %}Execuções{% endblock %}{% block cabecalho %}Execuções{% endblock %}
+{% block subtitulo %}Histórico completo de cada rodada, com o que foi criado e eventuais erros.{% endblock %}
+{% block conteudo %}
+<form class="ops-filtros" method="get">
+<select name="rotina"><option value="">Todas as rotinas</option>{% for r in rotinas %}<option value="{{ r.codigo }}" {% if request.GET.rotina == r.codigo %}selected{% endif %}>{{ r.nome }}</option>{% endfor %}</select>
+<select name="status"><option value="">Todos os status</option>{% for v, n in status_opcoes %}<option value="{{ v }}" {% if request.GET.status == v %}selected{% endif %}>{{ n }}</option>{% endfor %}</select>
+<button class="ops-btn">Filtrar</button></form>
+<section class="ops-card">
+<table class="ops-tabela"><thead><tr><th>Rotina</th><th>Referência</th><th>Origem</th><th>Status</th><th>Processados</th><th>Criados</th><th>Ignorados</th><th>Duração</th><th>Início</th></tr></thead><tbody>
+{% for e in pagina %}<tr><td><a href="{% url 'painel:execucao_detalhe' e.pk %}">{{ e.rotina.nome }}</a></td><td>{{ e.data_referencia|date:"d/m/Y" }}</td><td>{{ e.get_origem_display }}{% if e.executado_por %}<small class="ops-sub">{{ e.executado_por }}</small>{% endif %}</td><td>{% include "painel/_status.html" with s=e.status rotulo=e.get_status_display %}</td><td>{{ e.itens_processados }}</td><td>{{ e.itens_criados }}</td><td>{{ e.itens_ignorados }}</td><td>{% if e.duracao %}{{ e.duracao.total_seconds|floatformat:1 }}s{% else %}—{% endif %}</td><td>{{ e.iniciada_em|date:"d/m/Y H:i" }}</td></tr>
+{% empty %}<tr><td colspan="9" class="ops-vazio">Nenhuma execução encontrada.</td></tr>{% endfor %}
+</tbody></table>
+{% include "painel/_paginacao.html" %}
+</section>
+{% endblock %}

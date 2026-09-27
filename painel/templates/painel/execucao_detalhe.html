@@ -1,0 +1,13 @@
+{% extends "painel/base.html" %}
+{% block titulo %}Execução{% endblock %}{% block cabecalho %}{{ e.rotina.nome }}{% endblock %}
+{% block subtitulo %}Referência {{ e.data_referencia|date:"d/m/Y" }} · {{ e.get_origem_display }}{% endblock %}
+{% block acoes %}<a class="ops-btn" href="{% url 'painel:execucoes' %}"><i class="bi bi-arrow-left"></i>Voltar</a>{% endblock %}
+{% block conteudo %}
+<section class="ops-kpis">
+<div class="ops-kpi"><span>Status</span><strong>{% include "painel/_status.html" with s=e.status rotulo=e.get_status_display %}</strong></div>
+<div class="ops-kpi"><span>Processados</span><strong>{{ e.itens_processados }}</strong></div>
+<div class="ops-kpi verde"><span>Criados / enviados</span><strong>{{ e.itens_criados }}</strong></div>
+<div class="ops-kpi"><span>Ignorados</span><strong>{{ e.itens_ignorados }}</strong></div>
+</section>
+<section class="ops-card"><h2>Detalhes</h2><pre class="ops-log">{{ e.detalhes|default:"Sem detalhes." }}</pre></section>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% load static %}<!doctype html>
+<html lang="pt-br"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block titulo %}Painel{% endblock %} · ZeladorX Automações</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="{% static 'painel/ops.css' %}?v=1">
+</head><body>
+<div class="ops-shell">
+<aside class="ops-sidebar">
+  <a class="ops-brand" href="{% url 'painel:inicio' %}"><span class="ops-logo"><i class="bi bi-lightning-charge-fill"></i></span><span><strong>ZeladorX</strong><small>Automações · interno</small></span></a>
+  <nav class="ops-nav">
+    <span class="ops-nav-title">Operação</span>
+    <a href="{% url 'painel:inicio' %}" class="{% if secao == 'inicio' %}ativo{% endif %}"><i class="bi bi-speedometer2"></i>Visão geral</a>
+    <a href="{% url 'painel:rotinas' %}" class="{% if secao == 'rotinas' %}ativo{% endif %}"><i class="bi bi-calendar2-week"></i>Rotinas</a>
+    <a href="{% url 'painel:execucoes' %}" class="{% if secao == 'execucoes' %}ativo{% endif %}"><i class="bi bi-clock-history"></i>Execuções</a>
+    <span class="ops-nav-title">Comunicação</span>
+    <a href="{% url 'painel:notificacoes' %}" class="{% if secao == 'notificacoes' %}ativo{% endif %}"><i class="bi bi-envelope-paper"></i>E-mails enviados</a>
+    <a href="{% url 'painel:configuracoes' %}" class="{% if secao == 'configuracoes' %}ativo{% endif %}"><i class="bi bi-sliders"></i>Configurações</a>
+  </nav>
+  <div class="ops-user"><i class="bi bi-person-circle"></i><span>{{ request.user.username }}<small>{{ request.user.email }}</small></span><a href="{% url 'painel:sair' %}" title="Sair"><i class="bi bi-box-arrow-right"></i></a></div>
+</aside>
+<main class="ops-main">
+  <header class="ops-top"><div><h1>{% block cabecalho %}{% endblock %}</h1><p>{% block subtitulo %}{% endblock %}</p></div><div class="ops-top-acoes">{% block acoes %}{% endblock %}</div></header>
+  {% if messages %}<div class="ops-mensagens">{% for m in messages %}<div class="ops-alerta {{ m.tags }}">{{ m }}</div>{% endfor %}</div>{% endif %}
+  {% block conteudo %}{% endblock %}
+</main>
+</div></body></html>

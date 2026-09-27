@@ -1,0 +1,36 @@
+{% extends "painel/base.html" %}
+{% block titulo %}Visão geral{% endblock %}{% block cabecalho %}Visão geral{% endblock %}
+{% block subtitulo %}Tudo o que roda sozinho na família ZeladorX, em um só lugar.{% endblock %}
+{% block conteudo %}
+<section class="ops-kpis">
+  <div class="ops-kpi"><i class="bi bi-play-circle"></i><span>Execuções hoje</span><strong>{{ kpi_execucoes_hoje }}</strong></div>
+  <div class="ops-kpi verde"><i class="bi bi-envelope-check"></i><span>E-mails enviados hoje</span><strong>{{ kpi_emails_hoje }}</strong></div>
+  <div class="ops-kpi {% if kpi_erros_7d %}vermelho{% endif %}"><i class="bi bi-exclamation-octagon"></i><span>Falhas em 7 dias</span><strong>{{ kpi_erros_7d }}</strong></div>
+  <div class="ops-kpi {% if kpi_falhas_email %}vermelho{% endif %}"><i class="bi bi-envelope-x"></i><span>E-mails com falha</span><strong>{{ kpi_falhas_email }}</strong></div>
+</section>
+<div class="ops-grid">
+<section class="ops-card">
+  <h2>Rotinas de hoje</h2>
+  <ul class="ops-rotinas">
+  {% for r in rotinas %}
+    <li class="{% if not r.ativa %}pausada{% endif %}">
+      <span class="ops-dot {% if r.hoje_ok %}ok{% elif r.ultima.status == 'erro' %}erro{% elif r.pendente %}pendente{% endif %}"></span>
+      <div><strong>{{ r.nome }}</strong><small>{% if not r.ativa %}Pausada{% elif r.hoje_ok %}Concluída hoje{% elif r.pendente %}Pendente — roda na próxima rodada{% else %}Programada para {{ r.horario|time:"H:i" }}{% endif %}</small></div>
+      <form method="post" action="{% url 'painel:executar_rotina' r.pk %}">{% csrf_token %}<input type="hidden" name="voltar" value="{% url 'painel:inicio' %}"><button class="ops-btn pequeno" title="Executar agora"><i class="bi bi-play-fill"></i></button></form>
+    </li>
+  {% endfor %}
+  </ul>
+</section>
+<section class="ops-card">
+  <h2>E-mails nos últimos 7 dias</h2>
+  <div class="ops-barras">{% for s in serie %}<div class="ops-barra"><span style="height:{{ s.altura }}%" title="{{ s.emails }} e-mail(s)"></span><b>{{ s.emails }}</b><small>{{ s.dia|date:"d/m" }}</small>{% if s.erro %}<em>{{ s.erro }} falha(s)</em>{% endif %}</div>{% endfor %}</div>
+</section>
+</div>
+<section class="ops-card">
+  <h2>Últimas execuções <a href="{% url 'painel:execucoes' %}" class="ops-link">ver todas</a></h2>
+  <table class="ops-tabela"><thead><tr><th>Rotina</th><th>Referência</th><th>Origem</th><th>Status</th><th>Criados</th><th>Início</th></tr></thead><tbody>
+  {% for e in ultimas %}<tr><td><a href="{% url 'painel:execucao_detalhe' e.pk %}">{{ e.rotina.nome }}</a></td><td>{{ e.data_referencia|date:"d/m/Y" }}</td><td>{{ e.get_origem_display }}</td><td>{% include "painel/_status.html" with s=e.status rotulo=e.get_status_display %}</td><td>{{ e.itens_criados }}</td><td>{{ e.iniciada_em|date:"d/m H:i" }}</td></tr>
+  {% empty %}<tr><td colspan="6" class="ops-vazio">Nenhuma execução ainda. Rode <code>python manage.py executar_automacoes</code>.</td></tr>{% endfor %}
+  </tbody></table>
+</section>
+{% endblock %}

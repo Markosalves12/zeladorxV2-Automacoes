@@ -1,0 +1,6 @@
+{% extends "notificacoes_email/base.html" %}
+{% block faixa %}Resumo do dia {{ data|date:"d/m/Y" }}{% endblock %}
+{% block conteudo %}
+<p style="margin:0;font-size:14px;line-height:1.6;">Você tem <strong>{{ total }} serviço(s)</strong> previstos para hoje nas suas equipes.</p>
+{% include "notificacoes_email/_lista.html" %}
+{% endblock %}
