@@ -39,6 +39,14 @@ def _env_bool(nome, padrao=False):
 SECRET_KEY_PADRAO = 'django-insecure-t+_dily3s3qm+@4k()5@$g3t&2$=6dvz-#h01i%@3t(7*4*!si'
 SECRET_KEY = os.getenv('SECRET_KEY') or SECRET_KEY_PADRAO
 SESSION_COOKIE_NAME = 'sessionid'
+# Login compartilhado: a sessão guarda o caminho do backend usado no login.
+# Precisa ser a MESMA lista do ZeladorX/ChatChannels; senão cada app descarta
+# a sessão do outro (não loga automaticamente e desloga os demais).
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.AllowAllUsersModelBackend',
+    'gerente.backends.CaseInsensitiveModelBackend',
+)
+CSRF_COOKIE_DOMAIN = None if RODANDO_LOCAL else os.getenv('SESSION_COOKIE_DOMAIN', '.zeladorx.com.br')
 SESSION_COOKIE_DOMAIN = None if RODANDO_LOCAL else os.getenv('SESSION_COOKIE_DOMAIN', '.zeladorx.com.br')
 
 DEBUG = _env_bool('DEBUG', RODANDO_LOCAL)
